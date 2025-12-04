@@ -43,9 +43,6 @@ func count_accessible_rolls_in_line(line_content string, line_number int) int {
 		}
 	}
 
-	fmt.Println("Line number:", line_number)
-	fmt.Println("Line content:", line_content)
-	fmt.Println("Accessible rolls in this line:", accessible_rolls)
 	return accessible_rolls
 }
 
@@ -86,11 +83,13 @@ func content_at_coordinates(x int, y int) string {
 		return ""
 	}
 
-	if x >= len(strings.Split(content(), "\n")[y]) {
+	width := len(strings.Split(content(), "\n")[y])
+	if x >= width {
 		return ""
 	}
 
-	if y >= len(strings.Split(content(), "\n")) {
+	height := len(strings.Split(content(), "\n"))
+	if y >= height {
 		return ""
 	}
 
