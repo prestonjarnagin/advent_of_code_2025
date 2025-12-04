@@ -1,5 +1,3 @@
-// Read example_input.txt
-
 package main
 
 import (
@@ -10,13 +8,7 @@ import (
 
 func main() {
 	fmt.Println(content())
-
-	total_accessible_rolls := 0
-	for line_number, line := range strings.Split(strings.TrimSpace(content()), "\n") {
-		total_accessible_rolls += count_accessible_rolls_in_line(line, line_number)
-	}
-
-	fmt.Println(total_accessible_rolls)
+	fmt.Println(count_accessible_rolls(content()))
 }
 
 func content() string {
@@ -30,6 +22,14 @@ func content() string {
 	return string(content)
 }
 
+func count_accessible_rolls(content string) int {
+		total_accessible_rolls := 0
+	for line_number, line := range strings.Split(strings.TrimSpace(content), "\n") {
+		total_accessible_rolls += count_accessible_rolls_in_line(line, line_number)
+	}
+	return total_accessible_rolls
+}
+
 func count_accessible_rolls_in_line(line_content string, line_number int) int {
 	accessible_rolls := 0
 
@@ -38,18 +38,16 @@ func count_accessible_rolls_in_line(line_content string, line_number int) int {
 			continue
 		}
 		if char == '@' {
-			current_coordinate := [2]int{x_coord, line_number}
-			accessible_rolls += check_surrounding_content(current_coordinate)
+			if roll_is_accessible(x_coord, line_number) {
+				accessible_rolls += 1
+			}
 		}
 	}
 
 	return accessible_rolls
 }
 
-func check_surrounding_content(coordinate [2]int) int {
-	x := coordinate[0]
-	y := coordinate[1]
-
+func roll_is_accessible(x int, y int) bool {
 	sum := 0
 
 	sum += value_at_coordinate(x-1, y-1) // Top Left
@@ -62,10 +60,10 @@ func check_surrounding_content(coordinate [2]int) int {
 	sum += value_at_coordinate(x+1, y+1) // Bottom Right
 
 	if sum < 4 {
-		return 1
+		return true
 	}
 
-	return 0
+	return false
 }
 
 func value_at_coordinate(x int, y int) int {
